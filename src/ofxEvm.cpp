@@ -27,7 +27,6 @@ ofxEvm::ofxEvm()
 
 void ofxEvm::update(const cv::Mat& mat)
 {
-    // --- TODO: implement rgb2ntsc
     cv::Mat mat32f;
     mat.convertTo(mat32f, CV_32F, 1.0/255.0);
     
