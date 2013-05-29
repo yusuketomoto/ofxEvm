@@ -1,4 +1,4 @@
-C++ implementation of Eulerian Video Magnification.
+## C++ implementation of Eulerian Video Magnification.
 
 http://people.csail.mit.edu/mrub/vidmag/
 
