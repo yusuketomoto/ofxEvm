@@ -1,0 +1,13 @@
+*.depend
+*.layout
+*.mode*v3
+*.pbxuser
+*.app*
+*.DS_*
+xcuserdata
+
+.svn/
+obj/
+bin/
+build/
+!data/
