@@ -1,58 +1,90 @@
-//
-//  ofxEvm.h
-//  example_evm
-//
-//  Created by Yusuke on 2013/03/30.
-//
-//
+#pragma once
 
-#ifndef __example_evm__ofxEvm__
-#define __example_evm__ofxEvm__
-
-#include "ofMain.h"
-#include "ofxCv.h"
 #include "Evm.h"
+#include "ofxCv.h"
 
-enum EVM_TEMPORAL_FILTER {
-    EVM_TEMPORAL_IIR = 0,
-    EVM_TEMPORAL_IDEAL
-};
+#define OFX_EVM_BEGIN_NAMESPACE \
+	namespace ofx               \
+	{
+#define OFX_EVM_END_NAMESPACE }
 
-class ofxEvm
+OFX_EVM_BEGIN_NAMESPACE
+
+class Evm
 {
+
 public:
-    ofxEvm();
-    void update(const cv::Mat& mat);
-    void draw(float x, float y);
-    
-    void setTemporalFilter(EVM_TEMPORAL_FILTER filter);
-    void setParamsIIR(float _alpha, float _lambda_c, float _r1, float _r2, float _chromAttenuation);
-    void setParamsIdeal(float _alpha, float _lambda_c, float _fl, float _fh, float _samplingRate, float _chromAttenuation);
-    
-    ofImage getMagnifiedImage();
-    std::vector<cv::Mat_<cv::Vec3f> > getPyramid() const { return lapPyr; }
-    
-private:
-    Evm evm;
-    
-    EVM_TEMPORAL_FILTER temporal_filter;
-    int levels;
-    float alpha_iir;
-    float lambda_c_iir;
-    float r1;
-    float r2;
-    float chromAttenuation_iir;
-    float alpha_ideal;
-    float lambda_c_ideal;
-    float fl;
-    float fh;
-    float samplingRate;
-    float chromAttenuation_ideal;
-    
-    std::vector<cv::Mat_<cv::Vec3f> > lapPyr;
-    cv::Mat filtered;
-    
-    
+	template <typename T>
+	void update(T& frame)
+	{
+		cv::Mat frame_mat = ofxCv::toCv(frame);
+		update(frame_mat);
+	}
+
+	void update(cv::Mat& frame)
+	{
+		using namespace ofxCv;
+
+		Mat result_mat;
+		evm.amplify(frame, pyramid, result_mat);
+
+		toOf(result_mat, result);
+		result.update();
+	}
+
+	void draw()
+	{
+		if (!result.isAllocated()) return;
+		result.draw(0, 0);
+	}
+
+	void amplification(float value)
+	{
+		evm.setAmplification(value);
+	}
+	float amplification() const
+	{
+		return evm.getAmplification();
+	}
+	void cutoff(float value)
+	{
+		evm.setCutoff(value);
+	}
+	float cutoff() const
+	{
+		return evm.getCutoff();
+	}
+	void freqMax(float value)
+	{
+		evm.setFreqMax(value);
+	}
+	float freqMax() const
+	{
+		return evm.getFreqMax();
+	}
+	void freqMin(float value)
+	{
+		evm.setFreqMin(value);
+	}
+	float freqMin() const
+	{
+		return evm.getFreqMin();
+	}
+	void chromeAttenuation(float value)
+	{
+		evm.setChromeAttenuation(value);
+	}
+	float chromeAttenuation() const
+	{
+		return evm.getChromeAttenuation();
+	}
+
+protected:
+	EulerianVideoMagnification evm;
+	ofFloatImage result;
+	vector<cv::Mat> pyramid;
 };
 
-#endif /* defined(__example_evm__ofxEvm__) */
+OFX_EVM_END_NAMESPACE
+
+typedef ofx::Evm ofxEvm;
