@@ -5,9 +5,9 @@
 *.app*
 *.DS_*
 xcuserdata
-
 .svn/
 obj/
 bin/
 build/
 !data/
+DerivedData
