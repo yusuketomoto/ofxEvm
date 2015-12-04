@@ -46,7 +46,7 @@ public:
 	{
 		video.draw(0, 0);
 		gui.draw();
-		ofTranslate(video.width, 0);
+		ofTranslate(video.getWidth(), 0);
 		evm.draw();
 	}
 	void updateParams()
