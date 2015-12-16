@@ -1,4 +1,4 @@
-ofxGui
-ofxOpenCv
 ofxCv
 ofxEvm
+ofxGui
+ofxOpenCv

@@ -60,8 +60,14 @@ void EulerianVideoMagnification::amplify(const Mat& src, vector<Mat>& pyramid,
 
 	Mat reconstructed;
 	reconstructImageFromLaplacianPyramid(filtered, reconstructed);
-	dst = src32f +
-		  reconstructed.mul(Vec3f(1, chrom_attenuation, chrom_attenuation));
+    Vec3f chrom(1, chrom_attenuation, chrom_attenuation);
+    for (int y=0; y<reconstructed.rows; y++) {
+        for (int x=0; x<reconstructed.cols; x++) {
+            Vec3f& px = reconstructed.at<Vec3f>(y,x);
+            px = px.mul(chrom);
+        }
+    }
+    dst = src32f + reconstructed;
 
 	ntsc2rgb(dst, dst);
 }
