@@ -25,7 +25,7 @@ public:
 	{
 		using namespace ofxCv;
 
-		Mat result_mat;
+		cv::Mat result_mat;
 		evm.amplify(frame, pyramid, result_mat);
 
 		toOf(result_mat, result);
